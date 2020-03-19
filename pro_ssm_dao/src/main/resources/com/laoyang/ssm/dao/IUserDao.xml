@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.laoyang.ssm.dao.IUserDao">
+
+    <resultMap id="userMap" type="userInfo">
+        <id property="id" column="id"/>
+        <result property="username" column="username"/>
+        <result property="email" column="email"/>
+        <result property="password" column="password"/>
+        <result property="phoneNum" column="phoneNum"/>
+        <result property="status" column="status"/>
+        <association property="roles" column="id" select="com.laoyang.ssm.dao.IRoleDao.findById"/>
+    </resultMap>
+
+    <select id="findRoleDesc" resultMap="userMap">
+        select *from role where id = #{id}
+    </select>
+
+    <select id="findByName" resultMap="userMap">
+        select *from users where username = #{username}
+    </select>
+
+    <delete id="deleteRole_User">
+        DELETE FROM users_role WHERE roleId = #{id}
+    </delete>
+
+    <delete id="deleteRole">
+        delete from role where id = #{id}
+    </delete>
+
+
+
+    <select id="findAll" resultType="userInfo">
+        select *from users
+    </select>
+
+    <insert id="save">
+        insert into users (username,email,password,phoneNum,status) values (#{username},#{email},#{password},#{phoneNum},#{status})
+    </insert>
+
+    <select id="findById" resultMap="userMap">
+        select *from users where id = #{id}
+    </select>
+
+
+    <select id="findCanRoles" resultType="com.laoyang.ssm.domain.Role">
+        select *from role where id not in (select roleId from users_role where userId = #{id})
+    </select>
+
+    <insert id="addRoleToUser">
+        insert into users_role (userId,roleId)values (#{userId},#{roleId})
+    </insert>
+
+
+</mapper>

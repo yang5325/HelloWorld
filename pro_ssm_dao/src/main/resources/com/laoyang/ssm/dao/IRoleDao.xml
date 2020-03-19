@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.laoyang.ssm.dao.IRoleDao">
+
+
+    <resultMap id="roleMap" type="com.laoyang.ssm.domain.Role">
+        <id property="id" column="id"/>
+        <result property="roleName" column="roleName"/>
+        <result property="roleDesc" column="roleDesc"/>
+        <association property="permissions" column="id" select="com.laoyang.ssm.dao.IPermission.findById"/>
+    </resultMap>
+
+    <select id="findById" resultMap="roleMap">
+        select *from role where id in (select roleId from users_role where userId = #{id})
+    </select>
+
+
+    <select id="findOnlyRoleById" resultType="com.laoyang.ssm.domain.Role">
+        select *from role where id in (select roleId from users_role where userId = #{id})
+    </select>
+
+    <select id="findAll" resultType="com.laoyang.ssm.domain.Role">
+        select *from role
+    </select>
+
+    <insert id="save">
+        insert into role (roleName,roleDesc) values (#{roleName},#{roleDesc})
+    </insert>
+
+    <select id="findRoleDesc" resultMap="roleMap">
+        select *from role where id = #{id}
+    </select>
+
+    <delete id="deleteRole_User">
+        DELETE FROM users_role WHERE roleId = #{id}
+    </delete>
+
+    <delete id="deleteRole">
+        delete from role where id = #{id}
+    </delete>
+
+</mapper>

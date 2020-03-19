@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.laoyang.ssm.dao.IOrdersDao">
+
+    <resultMap id="findAllMap" type="com.laoyang.ssm.domain.Orders">
+        <id property="id" column="id"/>
+        <result property="orderNum" column="orderNum"/>
+        <result property="orderTime" column="orderTime"/>
+        <result property="peopleCount" column="peopleCount"/>
+        <result property="orderDesc" column="orderDesc"/>
+        <result property="payType" column="payType"/>
+        <result property="orderStatus" column="orderStatus"/>
+        <association property="product" column="productId" select="com.laoyang.ssm.dao.IProductDao.findById"/>
+      </resultMap>
+
+    <select id="findAll" resultMap="findAllMap">
+        select *from orders
+    </select>
+
+
+
+    <select id="findById" resultMap="fidnByIdMap">
+        SELECT *FROM orders WHERE id = #{id}
+    </select>
+
+    <resultMap id="fidnByIdMap" type="com.laoyang.ssm.domain.Orders">
+        <id property="id" column="id"/>
+        <result property="orderNum" column="orderNum"/>
+        <result property="orderTime" column="orderTime"/>
+        <result property="peopleCount" column="peopleCount"/>
+        <result property="orderDesc" column="orderDesc"/>
+        <result property="payType" column="payType"/>
+        <result property="orderStatus" column="orderStatus"/>
+        <association property="product" column="productId" select="com.laoyang.ssm.dao.IProductDao.findById"/>
+        <association property="travellers" column="id" select="com.laoyang.ssm.dao.ITravellerDao.findById"/>
+        <association property="member" column="memberId" select="com.laoyang.ssm.dao.IMemberDao.findById"/>
+    </resultMap>
+
+
+
+
+</mapper>
